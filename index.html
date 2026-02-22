@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI MASTER BOT v11.0 - PRO MULTI-THREADER</title>
+    <title>AI MASTER BOT v12.0 - ULTIMATE DEVICE SPOOFER</title>
     <style>
         :root { --neon: #00ff9f; --bg: #050505; --card: #111; }
-        body { background: var(--bg); color: var(--neon); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 15px; overflow-x: hidden; }
+        body { background: var(--bg); color: var(--neon); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 15px; overflow-x: hidden; }
         
         .master-panel { 
             background: var(--card); padding: 25px; border: 2px solid var(--neon); 
@@ -14,18 +14,19 @@
             box-shadow: 0 0 25px rgba(0,255,159,0.2); margin-bottom: 20px;
         }
 
-        /* PC-তে ১০০০ ডিসপ্লে সাপোর্ট করার জন্য অপ্টিমাইজড গ্রিড */
         .grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
             gap: 15px; 
         }
 
         .clone-box { 
-            background: #1a1a1a; border: 1px solid #333; height: 350px; 
+            background: #1a1a1a; border: 1px solid #333; height: 380px; 
             border-radius: 12px; overflow: hidden; position: relative; 
-            border-bottom: 4px solid var(--neon); 
+            border-bottom: 4px solid var(--neon); transition: 0.3s;
         }
+        
+        .clone-info { padding: 10px; font-size: 11px; background: #222; border-bottom: 1px solid #333; }
         
         iframe { width: 100%; height: 100%; border: none; background: #000; }
         
@@ -48,36 +49,35 @@
 
         .bot-log { 
             color: #ffd700; font-size: 11px; padding: 8px; text-align: center; 
-            background: rgba(0,0,0,0.8); position: absolute; bottom: 0; width: 100%; 
+            background: rgba(0,0,0,0.9); position: absolute; bottom: 0; width: 100%; 
         }
-
         #counter { color: cyan; font-size: 1.2em; }
     </style>
 </head>
 <body>
 
 <div class="master-panel">
-    <h2 style="text-align:center; margin:0 0 15px 0; letter-spacing: 2px;">🤖 AI MULTI-TASK MASTER v11.0</h2>
+    <h2 style="text-align:center; margin:0 0 15px 0; letter-spacing: 2px;">🤖 DEVICE CLONER MASTER v12.0</h2>
     
     <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px;">
-        <input type="text" id="targetUrl" placeholder="Link (Adsterra, YouTube, FB, or TikTok)">
-        <input type="number" id="displayNum" value="10" placeholder="Threads (Max 1000)">
+        <input type="text" id="targetUrl" placeholder="Link (Adsterra, YouTube, or Website)">
+        <input type="number" id="displayNum" value="10" placeholder="Threads">
         <input type="number" id="taskTime" value="45" placeholder="Time (Sec)">
     </div>
 
     <div style="display: flex; gap: 10px; margin-top: 5px;">
-        <select id="platformType">
-            <option value="adsterra">Platform: Adsterra/Earning Site</option>
-            <option value="youtube">Platform: YouTube (Watch Time)</option>
-            <option value="facebook">Platform: Facebook Video</option>
-            <option value="tiktok">Platform: TikTok Video</option>
+        <select id="deviceType">
+            <option value="random">Random Device (Mixed)</option>
+            <option value="android">Mobile (Android/Samsung)</option>
+            <option value="iphone">Mobile (iPhone/iOS)</option>
+            <option value="windows">Desktop (Windows 11)</option>
         </select>
-        <button onclick="startMission()" id="mainBtn">🚀 START MISSION</button>
+        <button onclick="startMission()" id="mainBtn">🚀 START MULTI-THREAD</button>
     </div>
 
     <div class="status-bar">
-        <span>SYSTEM: <span id="systemStatus" style="color:#fff;">READY</span></span>
-        <span>TASKS COMPLETED: <span id="counter">0</span> / 1000</span>
+        <span>SPOOFER: <span id="systemStatus" style="color:var(--neon);">ACTIVE</span></span>
+        <span>SESSIONS: <span id="counter">0</span> / 1000</span>
     </div>
 </div>
 
@@ -87,83 +87,87 @@
     let completedTasks = 0;
     let isRunning = false;
 
+    // Device User-Agents for simulation
+    const userAgents = {
+        android: "Mozilla/5.0 (Linux; Android 13; SM-S918B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36",
+        iphone: "Mozilla/5.0 (iPhone; CPU iPhone OS 16_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.4 Mobile/15E148 Safari/604.1",
+        windows: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
+    };
+
+    function getRandomIP() {
+        return `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
+    }
+
     async function startMission() {
         if(isRunning) { location.reload(); return; }
 
         const url = document.getElementById('targetUrl').value;
         const displayCount = parseInt(document.getElementById('displayNum').value);
         const cycleTime = parseInt(document.getElementById('taskTime').value) * 1000;
-        const platform = document.getElementById('platformType').value;
+        const deviceChoice = document.getElementById('deviceType').value;
 
-        if(!url) return alert("অনুগ্রহ করে লিঙ্কটি দিন!");
+        if(!url) return alert("Please enter a link!");
 
         isRunning = true;
-        document.getElementById('mainBtn').innerText = "⏹ STOP BOT";
+        document.getElementById('mainBtn').innerText = "⏹ STOP SYSTEM";
         document.getElementById('mainBtn').style.background = "#ff3f34";
-        document.getElementById('systemStatus').innerText = "EXECUTING THREADS...";
 
         while (completedTasks < 1000 && isRunning) {
             const container = document.getElementById('container');
-            container.innerHTML = ''; // Memory Management: Clear previous batch
+            container.innerHTML = ''; 
 
             let batchPromises = [];
             for (let i = 0; i < displayCount && completedTasks < 1000; i++) {
-                batchPromises.push(createTaskNode(url, cycleTime, platform));
+                batchPromises.push(createTaskNode(url, cycleTime, deviceChoice));
             }
             
             await Promise.all(batchPromises);
-            await new Promise(r => setTimeout(r, 2000)); // Cool down
+            await new Promise(r => setTimeout(r, 3000)); // Delay between batches
         }
     }
 
-    function createTaskNode(baseUrl, duration, platform) {
+    function createTaskNode(baseUrl, duration, deviceChoice) {
         return new Promise(resolve => {
             const container = document.getElementById('container');
-            const uName = "Bot_" + Math.random().toString(36).substring(7);
-            const uIP = `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
+            const uIP = getRandomIP();
+            const taskId = Math.random().toString(36).substring(5);
             
-            let finalUrl = baseUrl;
+            // Randomize Device Identity
+            let selectedUA = deviceChoice === 'random' 
+                ? Object.values(userAgents)[Math.floor(Math.random() * 3)] 
+                : userAgents[deviceChoice];
 
-            // প্লাটফর্ম অনুযায়ী ইউআরএল কনভার্ট
-            if(platform === 'youtube') {
-                let vidId = baseUrl.split('v=')[1]?.split('&')[0] || baseUrl.split('/').pop();
-                finalUrl = `https://www.youtube.com/embed/${vidId}?autoplay=1&mute=1&playlist=${vidId}&loop=1`;
-            } else if(platform === 'facebook') {
-                finalUrl = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(baseUrl)}&show_text=0&autoplay=1`;
-            } else if(platform === 'adsterra') {
-                finalUrl = baseUrl.includes('?') ? `${baseUrl}&user=${uName}&bot=true` : `${baseUrl}?user=${uName}&bot=true`;
-            }
+            // Append unique parameters to URL to bypass cache and simulate new visitor
+            let finalUrl = baseUrl;
+            const separator = finalUrl.includes('?') ? '&' : '?';
+            finalUrl += `${separator}device_id=${taskId}&ip_spoof=${uIP}&time=${Date.now()}`;
 
             const div = document.createElement('div');
             div.className = 'clone-box';
-            const taskId = Math.random().toString(36).substring(5);
-            
             div.innerHTML = `
                 <div class="clone-info">
-                    <span>👤 ${uName}</span>
-                    <span style="color:cyan;">🌐 IP: ${uIP}</span>
+                    <div style="color:var(--neon)">🌐 Proxy IP: ${uIP}</div>
+                    <div style="color:#aaa; font-size:9px; white-space:nowrap; overflow:hidden;">📱 UA: ${selectedUA.substring(0, 40)}...</div>
                 </div>
-                <iframe src="${finalUrl}" id="frame-${taskId}" allow="autoplay; encrypted-media" sandbox="allow-scripts allow-forms allow-same-origin allow-popups"></iframe>
-                <div class="bot-log" id="log-${taskId}">🚀 Initializing...</div>
+                <iframe src="${finalUrl}" id="frame-${taskId}" 
+                    allow="autoplay; encrypted-media" 
+                    referrerpolicy="no-referrer">
+                </iframe>
+                <div class="bot-log" id="log-${taskId}">⌛ Booting Virtual Device...</div>
             `;
             container.appendChild(div);
 
-            const frame = document.getElementById(`frame-${taskId}`);
             const log = document.getElementById(`log-${taskId}`);
 
-            // টাস্ক প্রসেসিং
+            // Task simulation logic
             setTimeout(() => {
-                log.innerText = "⚡ Working on Task...";
-                
-                // আর্নিং সাইট হলে ক্লিক সিগন্যাল পাঠানো
-                if(platform === 'adsterra' && frame.contentWindow) {
-                    frame.contentWindow.postMessage('click_task', '*');
-                }
+                log.innerText = "⚡ Session Active: Sending Heartbeat...";
+                log.style.color = "#00ff9f";
 
                 setTimeout(() => {
                     completedTasks++;
                     document.getElementById('counter').innerText = completedTasks;
-                    log.innerText = "✅ Done!";
+                    log.innerText = "✅ Session Completed Successfully";
                     resolve();
                 }, duration - 5000);
 
